@@ -106,6 +106,6 @@ public class Usuario {
 				+ telefonoUsuario + ", emailUsuario=" + emailUsuario + ", claveUsuario=" + claveUsuario
 				+ ", esAdministradorUsuario=" + esAdministradorUsuario + ", fechaAltaUsuario=" + fechaAltaUsuario
 				+ ", fechaNacimientoUsuario=" + fechaNacimientoUsuario + "]";
-	}
+	}	
 	
 }

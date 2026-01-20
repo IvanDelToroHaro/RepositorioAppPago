@@ -1,4 +1,3 @@
+Usuario: registro, login, restablecer password
 
-Usuario: registro, login, restablecer pass
-
-Administrador
+Administrador: 

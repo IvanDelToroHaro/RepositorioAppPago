@@ -2,15 +2,16 @@ package controladores;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import entidades.Usuario;
-import servicios.MenuPrincipalImplementacion;
-import servicios.SubMenuUsuarioImplementacion;
+import servicios.Menu;
+import servicios.SubMenu;
+
 /**
  * 
  */
 public class Inicio {
 
+	public static final String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";
 	public static Scanner sc = new Scanner(System.in);
 	public static ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 	public static int ultimoIdUsuario = 0;
@@ -22,23 +23,22 @@ public class Inicio {
 	 */
 	public static void main(String[] args) {
 		
-		MenuPrincipalImplementacion mpi = new MenuPrincipalImplementacion();
-		SubMenuUsuarioImplementacion smui = new SubMenuUsuarioImplementacion();
+		Menu menu = new Menu();
+		SubMenu submenu = new SubMenu();
 		
 		boolean esCerradoMenuPrincipal = false;
-		byte opcionMenuPrincipal;
+		byte opcionMenu;
 		
 		do {
 			
-			mpi.mostrarMenu();
-			opcionMenuPrincipal = mpi.seleccionarOpcionMenu();
+			opcionMenu = menu.mostrarMenuYElegirOpcion();
 			
-			switch(opcionMenuPrincipal) {
+			switch(opcionMenu) {
 			case 0:
 				esCerradoMenuPrincipal = true;
 				break;
 			case 1:
-				smui.accionarSubMenuUsuario();
+				submenu.accionarSubMenuUsuario();
 				break;
 			case 2:
 				
@@ -53,3 +53,4 @@ public class Inicio {
 	}
 
 }
+

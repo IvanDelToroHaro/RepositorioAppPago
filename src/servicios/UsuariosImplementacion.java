@@ -1,7 +1,6 @@
 package servicios;
 
 import java.time.LocalDate;
-
 import controladores.Inicio;
 import entidades.Usuario;
 
@@ -14,7 +13,7 @@ public class UsuariosImplementacion {
 		
 		Usuario nuevoUsuario = new Usuario();
 		
-		System.out.println("Escriba su alias (no puede tener espacios): ");
+		/*System.out.println("Escriba su alias (no puede tener espacios): ");
 		nuevoUsuario.setAliasUsuario(Inicio.sc.next());
 		
 		System.out.println("Escriba su nombre: ");
@@ -24,14 +23,37 @@ public class UsuariosImplementacion {
 		System.out.println("Escriba sus apellidos: ");		
 		nuevoUsuario.setApellidosUsuario(Inicio.sc.nextLine());
 		
-		System.out.println("Escriba su dni: ");
-		nuevoUsuario.setDniUsuario(Inicio.sc.next());
+		//System.out.println("Escriba su teléfono: ");
 		
-		System.out.println("Escriba su teléfono: ");
-		nuevoUsuario.setTelefonoUsuario(Inicio.sc.nextInt());
+		 int telefono;
+
+	        do {
+	            System.out.println("Introduce un numero de telefono (9 digitos): ");
+	            telefono = Inicio.sc.nextInt();
+	        } while (telefono < 100000000 || telefono > 999999999);
+
+	        System.out.println("Telefono valido: +34 " + telefono);
+			nuevoUsuario.setTelefonoUsuario(telefono);
 		
-		System.out.println("Escriba su email: ");
-		nuevoUsuario.setEmailUsuario(Inicio.sc.next());
+			
+			//email
+		String email;
+		boolean emailValido;
+
+		do {
+		    System.out.println("Escriba su email: ");
+		    email = Inicio.sc.next();
+
+		    if (validarEmail(email)) {
+		        emailValido = true;
+		    } else {
+		        System.out.println("Email no válido. Debe contener @ y un punto después del @");
+		        emailValido = false;
+		    }
+
+		} while (!emailValido);
+
+		nuevoUsuario.setEmailUsuario(email);
 		
 		//Solicitud de clave
 		boolean solicitarClave;		
@@ -49,13 +71,41 @@ public class UsuariosImplementacion {
 			}
 		}while(solicitarClave);
 		
+		//Dividir fecha en año, meses y dias
 		System.out.println("Escriba su fecha de nacimiento (dd-MM-yyyy): ");
 		String fechaFormato = Inicio.sc.next();
 		String[] fechaDividida = fechaFormato.split("-");
 		nuevoUsuario.setFechaNacimientoUsuario(LocalDate.of(Integer.parseInt(fechaDividida[2]), Integer.parseInt(fechaDividida[1]), Integer.parseInt(fechaDividida[0])));
-				
-		Inicio.listaUsuarios.add(nuevoUsuario);
-		System.out.println("El usuario se ha dado de alta correctamente.");
+		*/
+		//Validación del dni
+		String dni;
+        boolean valido= true;
+
+        do {
+            System.out.println("Introduce un DNI (8 numeros y 1 letra): ");
+            dni = Inicio.sc.next().toUpperCase();
+            // Comprobar formato
+            if (!dni.matches("\\d{8}[A-Z]")) {
+                valido = false;
+                System.out.println("DNI Mal introducido");
+            } else {
+                int numero = Integer.parseInt(dni.substring(0, 8));
+                char letraIntroducida = dni.charAt(8);
+                char letraCorrecta = Inicio.LETRAS.charAt(numero % 23);
+
+                if (letraIntroducida != letraCorrecta) {
+                    valido = false;
+                }
+            }
+
+        } while (!valido);
+
+        System.out.println("DNI valido: " + dni);
+        nuevoUsuario.setDniUsuario(dni);
+	}
+	
+	public static boolean validarEmail(String email) {
+	    return email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 	}
 	
 	public void loginUsuario() {
@@ -84,7 +134,6 @@ public class UsuariosImplementacion {
 		}else {
 			System.out.println("Los datos de acceso son incorrectos.");
 		}		
-		
 	}
 	
 	public void bajaUsuarioXAlias() {
@@ -98,71 +147,10 @@ public class UsuariosImplementacion {
 				for(Usuario u : Inicio.listaUsuarios) {
 					if(u.getAliasUsuario().equals(alias)) {
 						Inicio.listaUsuarios.remove(u);
-						Inicio.sesion = "";
-						System.out.println("La baja del usuario se ha hecho correctamente.");
 						break;
 					}
 				}
-			}else {
-				System.out.println("No puede realizarse la baja de un usuario no logado.");
-			}
-		}		
-		
-	}
-	
-	public void modificarUsuarioXAlias() {
-		
-		if(Inicio.sesion.isBlank()) {
-			System.out.println("Debe haber iniciado sesión para poder modificar su contraseña.");
-		}else {			
-			Usuario uAuxiliar = new Usuario();
-			for(Usuario u : Inicio.listaUsuarios) {
-				if(u.getAliasUsuario().equals(Inicio.sesion)) {
-					uAuxiliar = u;
-					break;
-				}
-			}
-			System.out.println("Informe su contraseña anterior.");
-			String contraseniaActual = Inicio.sc.next();
-			if(uAuxiliar.getClaveUsuario().equals(contraseniaActual)) {
-				System.out.println("Informe la nueva contraseña.");
-				String contraseniaNueva = Inicio.sc.next();
-				uAuxiliar.setClaveUsuario(contraseniaNueva);
-				System.out.println("La contraseña se ha modificado correctamente.");
-			}else {
-				System.out.println("La contraseña actual no es correcta.");
-			}
-
-		}		
-		
-	}
-	
-	public void listarUsuarios() {
-		
-		for(Usuario u : Inicio.listaUsuarios) {
-			System.out.println(u.toString());
-		}
-		
-	}
-	
-	public void listarUsuariosAdministradores() {
-		
-		for(Usuario u : Inicio.listaUsuarios) {
-			if(u.isEsAdministradorUsuario()) {
-				System.out.println(u.toString());
 			}
 		}
-		
 	}
-	
-	public void listarUsuariosNormales() {
-		
-		for(Usuario u : Inicio.listaUsuarios) {
-			if(!u.isEsAdministradorUsuario()) {
-				System.out.println(u.toString());
-			}
-		}
-		
-	}
-
 }
